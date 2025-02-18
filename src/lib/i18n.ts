@@ -4,6 +4,15 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
+      // Header
+      businessProposal: "Business Proposal Generator",
+      createProposal:
+        "Create professional business proposals in minutes with AI assistance",
+      poweredBy: "Powered by My Amigx",
+      fillDetails: "Fill in your project details",
+      generateAI: "Generate with AI",
+      exportDoc: "Export as PDF or Word",
+
       // Form
       clientDetails: "Client Details",
       serviceDetails: "Service Details",
@@ -33,6 +42,7 @@ const resources = {
       starts: "Starts",
       price: "Price",
       total: "Total",
+      anthropicApiKey: "Anthropic API Key",
 
       // Preview
       businessProposal: "Business Proposal",
@@ -58,6 +68,15 @@ const resources = {
   },
   es: {
     translation: {
+      // Header
+      businessProposal: "Generador de Propuestas",
+      createProposal:
+        "Crea propuestas comerciales profesionales en minutos con IA",
+      poweredBy: "Desarrollado por My Amigx",
+      fillDetails: "Completa los detalles del proyecto",
+      generateAI: "Genera con IA",
+      exportDoc: "Exporta como PDF o Word",
+
       // Form
       clientDetails: "Datos del Cliente",
       serviceDetails: "Detalles del Servicio",
@@ -87,6 +106,7 @@ const resources = {
       starts: "Comienza",
       price: "Precio",
       total: "Total",
+      anthropicApiKey: "Clave API de Anthropic",
 
       // Preview
       businessProposal: "Propuesta Comercial",

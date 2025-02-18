@@ -151,7 +151,7 @@ export default function Landing() {
 const testimonials = [
   {
     name: "Sarah Chen",
-    role: "CEO, TechVision Inc",
+    role: "Artista Digital",
     quote:
       "This tool has revolutionized how we create business proposals. What used to take days now takes minutes.",
     avatar:

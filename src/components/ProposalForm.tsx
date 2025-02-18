@@ -109,12 +109,37 @@ const ProposalForm = ({
         className="w-full"
         onValueChange={(value) => form.clearErrors()}
       >
-        <TabsList className="grid w-full grid-cols-5 mb-6">
-          <TabsTrigger value="client">{t("clientDetails")}</TabsTrigger>
-          <TabsTrigger value="service">{t("serviceDetails")}</TabsTrigger>
-          <TabsTrigger value="pricing">{t("pricingTimeline")}</TabsTrigger>
-          <TabsTrigger value="terms">{t("terms")}</TabsTrigger>
-          <TabsTrigger value="styling">{t("styling")}</TabsTrigger>
+        <TabsList className="flex flex-wrap w-full gap-2 mb-6">
+          <TabsTrigger
+            value="client"
+            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
+          >
+            {t("clientDetails")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="service"
+            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
+          >
+            {t("serviceDetails")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="pricing"
+            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
+          >
+            {t("pricingTimeline")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="terms"
+            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
+          >
+            {t("terms")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="styling"
+            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
+          >
+            {t("styling")}
+          </TabsTrigger>
         </TabsList>
 
         <Form {...form}>
