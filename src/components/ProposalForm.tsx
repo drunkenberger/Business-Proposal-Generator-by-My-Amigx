@@ -16,7 +16,13 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import ValidationMessage from "./ValidationMessage";
 import { useForm } from "react-hook-form";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 interface CostItem {
   description: string;
@@ -38,6 +44,10 @@ interface ProposalFormData {
   accentColor?: string;
   companyTitle?: string;
   companySubtitle?: string;
+  backgroundColor?: string;
+  gradientStyle?: "solid" | "gradient" | "radial";
+  fontFamily?: "sans" | "serif" | "mono";
+  borderStyle?: "none" | "simple" | "double" | "glow";
 }
 
 interface ProposalFormProps {
@@ -109,278 +119,92 @@ const ProposalForm = ({
         className="w-full"
         onValueChange={(value) => form.clearErrors()}
       >
-        <TabsList className="flex flex-wrap w-full gap-2 mb-6">
-          <TabsTrigger
-            value="client"
-            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
-          >
-            {t("clientDetails")}
-          </TabsTrigger>
-          <TabsTrigger
-            value="service"
-            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
-          >
-            {t("serviceDetails")}
-          </TabsTrigger>
-          <TabsTrigger
-            value="pricing"
-            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
-          >
-            {t("pricingTimeline")}
-          </TabsTrigger>
-          <TabsTrigger
-            value="terms"
-            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
-          >
-            {t("terms")}
-          </TabsTrigger>
-          <TabsTrigger
-            value="styling"
-            className="flex-1 min-w-[140px] px-4 py-2 h-auto whitespace-normal text-center"
-          >
-            {t("styling")}
-          </TabsTrigger>
-        </TabsList>
+        <div className="bg-gray-50 -mx-6 px-6 py-4 border-b">
+          <TabsList className="flex w-full justify-between">
+            <TabsTrigger
+              value="client"
+              className="flex-1 px-4 py-2 h-auto text-sm font-medium"
+            >
+              {t("clientDetails")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="service"
+              className="flex-1 px-4 py-2 h-auto text-sm font-medium"
+            >
+              {t("serviceDetails")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="pricing"
+              className="flex-1 px-4 py-2 h-auto text-sm font-medium"
+            >
+              {t("pricingTimeline")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="terms"
+              className="flex-1 px-4 py-2 h-auto text-sm font-medium"
+            >
+              {t("terms")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="styling"
+              className="flex-1 px-4 py-2 h-auto text-sm font-medium"
+            >
+              {t("styling")}
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-6"
-          >
-            <TabsContent value="client">
-              <FormField
-                control={form.control}
-                name="anthropicApiKey"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("anthropicApiKey")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your Anthropic API key"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="h-4" />
-
-              <div className="space-y-4">
+          <div className="mt-8">
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-6"
+            >
+              <TabsContent value="client">
                 <FormField
                   control={form.control}
-                  name="clientName"
+                  name="anthropicApiKey"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("clientName")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter client name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="clientEmail"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("clientEmail")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="Enter client email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="projectTitle"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("projectTitle")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter project title" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="service">
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="serviceDescription"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("serviceDescription")}</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Describe the services to be provided"
-                          className="min-h-[150px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="deliverables"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("deliverables")}</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="List the project deliverables"
-                          className="min-h-[150px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="pricing">
-              <div className="space-y-4">
-                <div>
-                  <FormLabel>{t("costItems")}</FormLabel>
-                  <div className="space-y-2">
-                    {costItems.map((item, index) => (
-                      <div key={index} className="flex gap-2 items-start">
-                        <div className="flex-grow">
-                          <FormLabel className="text-xs mb-1">
-                            Description
-                          </FormLabel>
-                          <Input
-                            placeholder="Item description"
-                            value={item.description}
-                            onChange={(e) =>
-                              updateCostItem(
-                                index,
-                                "description",
-                                e.target.value,
-                              )
-                            }
-                          />
-                        </div>
-                        <div className="w-20">
-                          <FormLabel className="text-xs mb-1">
-                            Quantity
-                          </FormLabel>
-                          <Input
-                            type="number"
-                            placeholder="Qty"
-                            value={item.quantity}
-                            onChange={(e) =>
-                              updateCostItem(
-                                index,
-                                "quantity",
-                                parseInt(e.target.value) || 0,
-                              )
-                            }
-                          />
-                        </div>
-                        <div className="w-32">
-                          <FormLabel className="text-xs mb-1">
-                            Unit Price ($)
-                          </FormLabel>
-                          <Input
-                            type="number"
-                            placeholder="Price"
-                            value={item.unitPrice}
-                            onChange={(e) =>
-                              updateCostItem(
-                                index,
-                                "unitPrice",
-                                parseFloat(e.target.value) || 0,
-                              )
-                            }
-                          />
-                        </div>
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => removeCostItem(index)}
-                          disabled={costItems.length === 1}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                      <div className="flex items-center gap-2">
+                        <FormLabel>{t("anthropicApiKey")}</FormLabel>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-4 w-4 p-0 hover:bg-transparent"
+                                onClick={() =>
+                                  window.open(
+                                    "https://console.anthropic.com/account/keys",
+                                    "_blank",
+                                  )
+                                }
+                                type="button"
+                              >
+                                <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-[300px]">
+                              <p>Get your API key from Anthropic Console:</p>
+                              <ol className="list-decimal ml-4 mt-1 text-sm">
+                                <li>Go to console.anthropic.com</li>
+                                <li>Sign up or log in to your account</li>
+                                <li>Navigate to API Keys section</li>
+                                <li>
+                                  Click &quot;Create Key&quot; to generate a new
+                                  key
+                                </li>
+                              </ol>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       </div>
-                    ))}
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={addCostItem}
-                    className="mt-2"
-                  >
-                    <Plus className="h-4 w-4 mr-2" /> Add Item
-                  </Button>
-                </div>
-
-                <div>
-                  <FormLabel>{t("projectTimeline")}</FormLabel>
-                  <TimelineInput
-                    items={timelineItems}
-                    onChange={setTimelineItems}
-                  />
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="terms">
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="customTerms"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("additionalTerms")}</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Add any additional terms and conditions"
-                          className="min-h-[200px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="styling">
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="companyLogo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("companyLogo")}</FormLabel>
                       <FormControl>
                         <Input
-                          type="url"
-                          placeholder="Enter logo URL"
+                          type="password"
+                          placeholder="Enter your Anthropic API key"
                           {...field}
                         />
                       </FormControl>
@@ -389,76 +213,393 @@ const ProposalForm = ({
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="accentColor"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("accentColor")}</FormLabel>
-                      <FormControl>
-                        <div className="flex gap-2 items-center">
+                <div className="h-4" />
+
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="clientName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("clientName")}</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter client name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="clientEmail"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("clientEmail")}</FormLabel>
+                        <FormControl>
                           <Input
-                            type="color"
-                            className="w-12 h-10 p-1"
+                            type="email"
+                            placeholder="Enter client email"
                             {...field}
                           />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="projectTitle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("projectTitle")}</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter project title" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="service">
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="serviceDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("serviceDescription")}</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Describe the services to be provided"
+                            className="min-h-[150px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="deliverables"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("deliverables")}</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="List the project deliverables"
+                            className="min-h-[150px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="pricing">
+                <div className="space-y-4">
+                  <div>
+                    <FormLabel>{t("costItems")}</FormLabel>
+                    <div className="space-y-2">
+                      {costItems.map((item, index) => (
+                        <div key={index} className="flex gap-2 items-start">
+                          <div className="flex-grow">
+                            <FormLabel className="text-xs mb-1">
+                              Description
+                            </FormLabel>
+                            <Input
+                              placeholder="Item description"
+                              value={item.description}
+                              onChange={(e) =>
+                                updateCostItem(
+                                  index,
+                                  "description",
+                                  e.target.value,
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="w-20">
+                            <FormLabel className="text-xs mb-1">
+                              Quantity
+                            </FormLabel>
+                            <Input
+                              type="number"
+                              placeholder="Qty"
+                              value={item.quantity}
+                              onChange={(e) =>
+                                updateCostItem(
+                                  index,
+                                  "quantity",
+                                  parseInt(e.target.value) || 0,
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="w-32">
+                            <FormLabel className="text-xs mb-1">
+                              Unit Price ($)
+                            </FormLabel>
+                            <Input
+                              type="number"
+                              placeholder="Price"
+                              value={item.unitPrice}
+                              onChange={(e) =>
+                                updateCostItem(
+                                  index,
+                                  "unitPrice",
+                                  parseFloat(e.target.value) || 0,
+                                )
+                              }
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => removeCostItem(index)}
+                            disabled={costItems.length === 1}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addCostItem}
+                      className="mt-2"
+                    >
+                      <Plus className="h-4 w-4 mr-2" /> Add Item
+                    </Button>
+                  </div>
+
+                  <div>
+                    <FormLabel>{t("projectTimeline")}</FormLabel>
+                    <TimelineInput
+                      items={timelineItems}
+                      onChange={setTimelineItems}
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="terms">
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="customTerms"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("additionalTerms")}</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Add any additional terms and conditions"
+                            className="min-h-[200px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="styling">
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="companyLogo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("companyLogo")}</FormLabel>
+                        <FormControl>
                           <Input
-                            type="text"
-                            placeholder="#000000"
+                            type="url"
+                            placeholder="Enter logo URL"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="accentColor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("accentColor")}</FormLabel>
+                        <FormControl>
+                          <div className="flex gap-2 items-center">
+                            <Input
+                              type="color"
+                              className="w-12 h-10 p-1"
+                              {...field}
+                            />
+                            <Input
+                              type="text"
+                              placeholder="#000000"
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.target.value)}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="companyTitle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("companyTitle")}</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter company title" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="companySubtitle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("companySubtitle")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter company subtitle"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="backgroundColor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("backgroundColor")}</FormLabel>
+                        <FormControl>
+                          <div className="flex gap-2 items-center">
+                            <Input
+                              type="color"
+                              className="w-12 h-10 p-1"
+                              {...field}
+                            />
+                            <Input
+                              type="text"
+                              placeholder="#000000"
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.target.value)}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="gradientStyle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("gradientStyle")}</FormLabel>
+                        <FormControl>
+                          <select
+                            className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm"
                             value={field.value}
                             onChange={(e) => field.onChange(e.target.value)}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                          >
+                            <option value="solid">{t("solid")}</option>
+                            <option value="gradient">{t("gradient")}</option>
+                            <option value="radial">{t("radial")}</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="companyTitle"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("companyTitle")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter company title" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={form.control}
+                    name="fontFamily"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("fontFamily")}</FormLabel>
+                        <FormControl>
+                          <select
+                            className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm"
+                            value={field.value}
+                            onChange={(e) => field.onChange(e.target.value)}
+                          >
+                            <option value="sans">{t("sans")}</option>
+                            <option value="serif">{t("serif")}</option>
+                            <option value="mono">{t("mono")}</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="companySubtitle"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("companySubtitle")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter company subtitle"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  <FormField
+                    control={form.control}
+                    name="borderStyle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("borderStyle")}</FormLabel>
+                        <FormControl>
+                          <select
+                            className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm"
+                            value={field.value}
+                            onChange={(e) => field.onChange(e.target.value)}
+                          >
+                            <option value="none">{t("none")}</option>
+                            <option value="simple">{t("simple")}</option>
+                            <option value="double">{t("double")}</option>
+                            <option value="glow">{t("glow")}</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+
+              <div className="flex justify-between pt-6">
+                <ValidationMessage
+                  type="success"
+                  message="All changes saved"
+                  className="w-2/3"
                 />
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? t("generating") : t("generateProposal")}
+                </Button>
               </div>
-            </TabsContent>
-
-            <div className="flex justify-between pt-6">
-              <ValidationMessage
-                type="success"
-                message="All changes saved"
-                className="w-2/3"
-              />
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? t("generating") : t("generateProposal")}
-              </Button>
-            </div>
-          </form>
+            </form>
+          </div>
         </Form>
       </Tabs>
     </Card>

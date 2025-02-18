@@ -11,6 +11,10 @@ interface ProposalPreviewProps {
   accentColor?: string;
   companyTitle?: string;
   companySubtitle?: string;
+  backgroundColor?: string;
+  gradientStyle?: "solid" | "gradient" | "radial";
+  fontFamily?: "sans" | "serif" | "mono";
+  borderStyle?: "none" | "simple" | "double" | "glow";
   clientDetails?: {
     name: string;
     company: string;
@@ -62,6 +66,10 @@ const ProposalPreview = ({
   accentColor = "#EC4899",
   companyTitle = "My Amigx Labs",
   companySubtitle = "Soluciones Digitales Innovadoras",
+  backgroundColor = "#4C1D95",
+  gradientStyle = "gradient",
+  fontFamily = "sans",
+  borderStyle = "simple",
 }: ProposalPreviewProps) => {
   const { t } = useTranslation();
   const totalAmount = pricing.items.reduce(
@@ -69,19 +77,62 @@ const ProposalPreview = ({
     0,
   );
 
+  const getBackground = () => {
+    switch (gradientStyle) {
+      case "solid":
+        return backgroundColor;
+      case "gradient":
+        return `linear-gradient(to bottom right, ${backgroundColor}, ${accentColor}, #1E40AF)`;
+      case "radial":
+        return `radial-gradient(circle at center, ${backgroundColor}, ${accentColor})`;
+      default:
+        return backgroundColor;
+    }
+  };
+
+  const getFontFamily = () => {
+    switch (fontFamily) {
+      case "serif":
+        return "Georgia, serif";
+      case "mono":
+        return "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+      default:
+        return "ui-sans-serif, system-ui, -apple-system, sans-serif";
+    }
+  };
+
+  const getBorderStyles = () => {
+    switch (borderStyle) {
+      case "simple":
+        return { border: `1px solid ${accentColor}` };
+      case "double":
+        return { border: `4px double ${accentColor}` };
+      case "glow":
+        return {
+          border: `1px solid ${accentColor}`,
+          boxShadow: `0 0 20px ${accentColor}`,
+        };
+      default:
+        return {};
+    }
+  };
+
   return (
     <div
       className="flex flex-col h-full"
       style={{
-        background:
-          "linear-gradient(to bottom right, #4C1D95, #BE185D, #1E40AF)",
+        background: getBackground(),
       }}
     >
       <div className="h-1 bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600" />
       <ScrollArea className="flex-grow p-6">
         <div
           id="proposal-preview"
-          className="max-w-4xl mx-auto bg-black/50 p-8 rounded-lg border border-pink-500 shadow-lg text-white"
+          className="max-w-4xl mx-auto bg-black/50 p-8 rounded-lg shadow-lg text-white"
+          style={{
+            fontFamily: getFontFamily(),
+            ...getBorderStyles(),
+          }}
         >
           {/* Header */}
           <header className="text-center mb-8">
@@ -97,11 +148,13 @@ const ProposalPreview = ({
             </div>
             <h1
               className="text-5xl font-bold mb-6 leading-tight"
+              className="bg-clip-text"
               style={{
-                background: "linear-gradient(to right, #22D3EE, #EC4899)",
+                background: `linear-gradient(to right, #22D3EE, ${accentColor})`,
                 WebkitBackgroundClip: "text",
-                backgroundClip: "text",
                 color: "transparent",
+                WebkitTextFillColor: "transparent",
+                display: "inline-block",
                 paddingBottom: "0.5rem",
               }}
             >
@@ -116,15 +169,15 @@ const ProposalPreview = ({
               {t("clientDetails")}
             </h2>
             <p>
-              <span className="text-pink-400">{t("clientName")}:</span>{" "}
+              <span style={{ color: accentColor }}>{t("clientName")}:</span>{" "}
               {clientDetails.name}
             </p>
             <p>
-              <span className="text-pink-400">{t("projectTitle")}:</span>{" "}
+              <span style={{ color: accentColor }}>{t("projectTitle")}:</span>{" "}
               {clientDetails.company}
             </p>
             <p>
-              <span className="text-pink-400">Email:</span>{" "}
+              <span style={{ color: accentColor }}>Email:</span>{" "}
               {clientDetails.email}
             </p>
           </section>
@@ -155,19 +208,19 @@ const ProposalPreview = ({
               {t("pricingDetails")}
             </h2>
             <div className="overflow-x-auto">
-              <table className="w-full border border-pink-500">
-                <thead className="bg-pink-500/50">
+              <table className="w-full" style={{ borderColor: accentColor }}>
+                <thead style={{ backgroundColor: `${accentColor}40` }}>
                   <tr>
-                    <th className="px-4 py-2 text-left border border-pink-500">
+                    <th className="px-4 py-2 text-left border">
                       {t("description")}
                     </th>
-                    <th className="px-4 py-2 text-right border border-pink-500">
+                    <th className="px-4 py-2 text-right border">
                       {t("quantity")}
                     </th>
-                    <th className="px-4 py-2 text-right border border-pink-500">
+                    <th className="px-4 py-2 text-right border">
                       {t("price")}
                     </th>
-                    <th className="px-4 py-2 text-right border border-pink-500">
+                    <th className="px-4 py-2 text-right border">
                       {t("total")}
                     </th>
                   </tr>
@@ -175,16 +228,14 @@ const ProposalPreview = ({
                 <tbody>
                   {pricing.items.map((item, index) => (
                     <tr key={index}>
-                      <td className="px-4 py-2 border border-pink-500">
-                        {item.description}
-                      </td>
-                      <td className="px-4 py-2 text-right border border-pink-500">
+                      <td className="px-4 py-2 border">{item.description}</td>
+                      <td className="px-4 py-2 text-right border">
                         {item.quantity}
                       </td>
-                      <td className="px-4 py-2 text-right border border-pink-500">
+                      <td className="px-4 py-2 text-right border">
                         ${item.price.toLocaleString()}
                       </td>
-                      <td className="px-4 py-2 text-right border border-pink-500">
+                      <td className="px-4 py-2 text-right border">
                         ${(item.price * item.quantity).toLocaleString()}
                       </td>
                     </tr>
@@ -208,7 +259,8 @@ const ProposalPreview = ({
               {timeline?.items?.map((item, index) => (
                 <div
                   key={index}
-                  className="flex justify-between items-center py-2 border-b border-pink-500"
+                  className="flex justify-between items-center py-2"
+                  style={{ borderBottom: `1px solid ${accentColor}` }}
                 >
                   <div>
                     <h3 className="font-medium">{item.milestone}</h3>
@@ -237,7 +289,12 @@ const ProposalPreview = ({
               <p>{t("standardTerms.validity")}</p>
               {customTerms && (
                 <>
-                  <div className="h-px my-4 bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600" />
+                  <div
+                    className="h-px my-4"
+                    style={{
+                      background: `linear-gradient(to right, #22D3EE, ${accentColor})`,
+                    }}
+                  />
                   <div className="whitespace-pre-wrap">{customTerms}</div>
                 </>
               )}
@@ -245,9 +302,12 @@ const ProposalPreview = ({
           </section>
 
           {/* Footer */}
-          <footer className="mt-12 pt-6 border-t border-pink-500 text-center text-cyan-300">
+          <footer
+            className="mt-12 pt-6 text-center text-cyan-300"
+            style={{ borderTop: `1px solid ${accentColor}` }}
+          >
             <p>
-              My Amigx Labs
+              {companyTitle}
               <br />
               Website: myamigxlab.com
               <br />
@@ -269,6 +329,10 @@ const ProposalPreview = ({
             customTerms,
             companyLogo,
             accentColor,
+            backgroundColor,
+            gradientStyle,
+            fontFamily,
+            borderStyle,
           })
         }
         companyLogo={companyLogo}

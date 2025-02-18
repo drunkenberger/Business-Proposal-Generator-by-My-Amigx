@@ -2,6 +2,19 @@ export function exportToHTML(elementId) {
   const element = document.getElementById(elementId);
   if (!element) return;
 
+  // Clone the element to avoid modifying the original
+  const clone = element.cloneNode(true) as HTMLElement;
+  const container = document.createElement("div");
+  container.appendChild(clone);
+
+  // Get computed styles of the preview container
+  const previewContainer = element.parentElement?.parentElement;
+  const computedStyle = previewContainer
+    ? getComputedStyle(previewContainer)
+    : null;
+  const background =
+    computedStyle?.background || computedStyle?.backgroundColor || "";
+
   const htmlContent = `
     <!DOCTYPE html>
     <html>
@@ -119,8 +132,8 @@ export function exportToHTML(elementId) {
       </style>
     </head>
     <body>
-      <div class="container">
-        ${element.innerHTML}
+      <div class="container" style="background: ${background}">
+        ${clone.outerHTML}
       </div>
     </body>
     </html>

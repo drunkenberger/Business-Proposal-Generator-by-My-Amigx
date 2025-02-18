@@ -44,11 +44,18 @@ const Home = () => {
     timelineItems: [
       { milestone: "", startDate: "", duration: 1, durationUnit: "weeks" },
     ],
+    backgroundColor: "#4C1D95",
+    gradientStyle: "gradient",
+    fontFamily: "sans",
+    borderStyle: "simple",
+    accentColor: "#EC4899",
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleFormSubmit = async (data: ProposalData) => {
+    // Update all form data including styling options
+    setProposalData(data);
     const dataWithLanguage = {
       ...data,
       language: i18n.language === "es" ? "Spanish" : "English",
