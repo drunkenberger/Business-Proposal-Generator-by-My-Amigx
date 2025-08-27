@@ -6,34 +6,88 @@ export const generateProposal = async (apiKey: string, formData: any) => {
     dangerouslyAllowBrowser: true,
   });
 
-  const prompt = `Generate a professional business proposal in ${formData.language || "English"} based on the following information. The entire response must be in ${formData.language || "English"}, including all section titles and content. Do not translate any proper nouns or numbers.
+  const prompt = `You are an expert business consultant and proposal writer with 15+ years of experience. Your task is to create a comprehensive, professional business proposal that significantly enriches and expands upon the basic information provided by the user.
 
-Client: ${formData.clientName}
-Project: ${formData.projectTitle}
-Services: ${formData.serviceDescription}
-Deliverables: ${formData.deliverables}
-Cost Items: ${formData.costItems?.map((item) => `${item.description}: ${item.unitPrice} x ${item.quantity}`).join("\n")}
-Timeline: ${formData.timelineItems?.map((item) => `${item.milestone}: ${item.duration} ${item.durationUnit} starting ${item.startDate}`).join("\n")}
+IMPORTANT: Generate the entire response in ${formData.language || "English"}. All section titles and content must be in ${formData.language || "English"}. Do not translate proper nouns or numbers.
+
+BASE INFORMATION PROVIDED:
+- Client: ${formData.clientName}
+- Project: ${formData.projectTitle} 
+- Services: ${formData.serviceDescription}
+- Deliverables: ${formData.deliverables}
+- Cost Items: ${formData.costItems?.map((item) => `${item.description}: ${item.hours} hours (rate determined by region)`).join("\n")}
+- Timeline: ${formData.timelineItems?.map((item) => `${item.milestone}: ${item.duration} ${item.durationUnit} starting ${item.startDate}`).join("\n")}
+
+YOUR MISSION: Transform this basic information into a compelling, detailed business proposal by:
+
+1. ENRICHING CONTENT: Expand each section with professional insights, industry best practices, and value propositions
+2. ADDING STRATEGIC VALUE: Include risk mitigation, success metrics, competitive advantages, and business impact
+3. PROFESSIONAL LANGUAGE: Use sophisticated business terminology while maintaining clarity
+4. COMPREHENSIVE DETAILS: Add methodology explanations, quality assurance processes, and technical specifications
+5. CLIENT FOCUS: Emphasize benefits, ROI, and how this project addresses client's business objectives
+
+Create a proposal that positions WAZA Lab as a premium, expert solution provider. Make the client feel confident they're making the right choice.
 
 Please provide your response in this exact format, with these exact section headers (translated to ${formData.language || "English"}):
 
 EXECUTIVE SUMMARY:
-[Write a compelling executive summary that explains the value proposition and main benefits]
+[Write a comprehensive 4-5 paragraph executive summary that includes:
+- Current market context and business opportunity analysis
+- Client's specific pain points and strategic objectives
+- WAZA Lab's unique value proposition and competitive differentiators
+- Our proven methodology and technical expertise
+- Quantifiable benefits, ROI projections, and business impact
+- Risk mitigation and success guarantee framework
+- Timeline efficiency and resource optimization
+Make it compelling, data-driven, and demonstrate deep industry knowledge.]
 
 SCOPE OF WORK:
-[Convert the deliverables into a detailed bullet-point list of specific tasks and outcomes. Each point should start with a verb and be specific about what will be delivered]
+[Transform the basic deliverables into an exhaustive, professional scope with:
+- Detailed phase-by-phase breakdown with specific deliverables
+- Technical architecture and implementation methodology
+- Quality assurance protocols and testing frameworks
+- Documentation standards and knowledge transfer processes
+- Performance benchmarks and success metrics
+- Risk assessment and mitigation strategies
+- Communication workflows and reporting cadence
+- Post-delivery support and maintenance protocols
+- Compliance and security considerations
+Format as comprehensive bullet points with measurable outcomes and specific methodologies.]
 
-The response should maintain a professional business tone and be completely in ${formData.language || "English"}. Make sure to expand on the provided information to create a comprehensive and persuasive proposal.`;
+TERMS AND CONDITIONS:
+[Generate comprehensive, professional terms that include:
+- Payment schedules and milestone-based billing
+- Intellectual property rights and ownership
+- Project scope change management procedures
+- Quality guarantees and performance warranties
+- Confidentiality and data protection clauses
+- Dispute resolution and escalation processes
+- Project termination and deliverable handover protocols
+- Liability limitations and indemnification terms
+- Force majeure and unforeseen circumstances provisions
+Make these terms professional, balanced, and protective for both parties.]
+
+ADDITIONAL GUIDELINES:
+- Use industry-specific terminology appropriately
+- Include relevant best practices and standards
+- Emphasize WAZA Lab's expertise and experience
+- Highlight unique value propositions
+- Address potential client concerns proactively
+- Make the proposal feel premium and comprehensive
+- Ensure all content is in ${formData.language || "English"}
+- Maintain professional, consultative tone throughout
+
+Transform this basic project information into a compelling business case that makes the client excited to work with WAZA Lab.`;
 
   try {
     const response = await anthropic.messages.create({
-      model: "claude-3-opus-20240229",
-      max_tokens: 4000,
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 8000,
       messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
+      temperature: 0.8,
     });
 
-    const text = response.content[0].text;
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
 
     // Parse sections using regex
     const executiveSummaryMatch =

@@ -219,7 +219,7 @@ export function exportToWord(data) {
     </head>
     <body>
       <div class="header">
-        <img src="${data.companyLogo || "https://lime-zygomorphic-vicuna-674.mypinata.cloud/ipfs/QmUUZrnhnLuh19NegbX9iMwbFWPubB6TZbRVFHK2mfPK5M"}" alt="Company Logo" class="logo">
+        <img src="${data.companyLogo || "/images/waza-logo.png"}" alt="Company Logo" class="logo">
         <h1>Business Proposal</h1>
       </div>
 
@@ -270,9 +270,9 @@ export function exportToWord(data) {
       </div>
 
       <div class="footer">
-        <p>My Amigx Labs</p>
-        <p>Website: myamigxlab.com</p>
-        <p>Email: contact@myamigxlab.com</p>
+        <p>WAZA Lab</p>
+        <p>Website: wazalab.com</p>
+        <p>Email: contact@wazalab.com</p>
       </div>
     </body>
     </html>

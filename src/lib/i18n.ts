@@ -5,10 +5,10 @@ const resources = {
   en: {
     translation: {
       // Header
-      businessProposal: "Business Proposal Generator",
+      businessProposal: "WAZA Lab Proposal Generator",
       createProposal:
         "Create professional business proposals in minutes with AI assistance",
-      poweredBy: "Powered by My Amigx",
+      poweredBy: "Powered by Waza Lab using Lemy AI",
       fillDetails: "Fill in your project details",
       generateAI: "Generate with AI",
       exportDoc: "Export as PDF or Word",
@@ -45,7 +45,7 @@ const resources = {
       anthropicApiKey: "Anthropic API Key",
 
       // Preview
-      businessProposal: "Business Proposal",
+      proposalTitle: "Business Proposal",
       preparedFor: "Prepared for:",
       executiveSummary: "Executive Summary",
       scopeOfWork: "Scope of Work",
@@ -78,15 +78,21 @@ const resources = {
       simple: "Simple Border",
       double: "Double Border",
       glow: "Glowing Border",
+      selectRegion: "Select Pricing Region:",
+      shareProposal: "Share Proposal",
+      copyLink: "Copy Link",
+      emailProposal: "Email Proposal",
+      whatsappShare: "Share via WhatsApp",
+      exportSuccess: "exported successfully!",
     },
   },
   es: {
     translation: {
       // Header
-      businessProposal: "Generador de Propuestas",
+      businessProposal: "Generador de Propuestas WAZA Lab",
       createProposal:
         "Crea propuestas comerciales profesionales en minutos con IA",
-      poweredBy: "Desarrollado por My Amigx",
+      poweredBy: "Desarrollado por Waza Lab usando Lemy AI",
       fillDetails: "Completa los detalles del proyecto",
       generateAI: "Genera con IA",
       exportDoc: "Exporta como PDF o Word",
@@ -123,7 +129,7 @@ const resources = {
       anthropicApiKey: "Clave API de Anthropic",
 
       // Preview
-      businessProposal: "Propuesta Comercial",
+      proposalTitle: "Propuesta Comercial",
       preparedFor: "Preparado para:",
       executiveSummary: "Resumen Ejecutivo",
       scopeOfWork: "Alcance del Trabajo",
@@ -157,6 +163,12 @@ const resources = {
       simple: "Borde Simple",
       double: "Borde Doble",
       glow: "Borde Brillante",
+      selectRegion: "Seleccionar Región de Precios:",
+      shareProposal: "Compartir Propuesta",
+      copyLink: "Copiar Enlace",
+      emailProposal: "Enviar por Email",
+      whatsappShare: "Compartir por WhatsApp",
+      exportSuccess: "exportado exitosamente!",
     },
   },
 };
