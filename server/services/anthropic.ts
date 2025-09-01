@@ -1,12 +1,22 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { ProposalRequest } from "../types/proposal";
 
-export const generateProposal = async (apiKey: string, formData: any) => {
-  const anthropic = new Anthropic({
-    apiKey,
-    dangerouslyAllowBrowser: true,
-  });
+export class AnthropicService {
+  private anthropic: Anthropic;
 
-  const prompt = `You are an expert business consultant and proposal writer with 15+ years of experience. Your task is to create a comprehensive, professional business proposal that significantly enriches and expands upon the basic information provided by the user.
+  constructor(apiKey?: string) {
+    const key = apiKey || process.env.ANTHROPIC_API_KEY;
+    if (!key) {
+      throw new Error('Anthropic API key is required');
+    }
+    
+    this.anthropic = new Anthropic({
+      apiKey: key,
+    });
+  }
+
+  async generateProposal(formData: ProposalRequest) {
+    const prompt = `You are an expert business consultant and proposal writer with 15+ years of experience. Your task is to create a comprehensive, professional business proposal that significantly enriches and expands upon the basic information provided by the user.
 
 IMPORTANT: Generate the entire response in ${formData.language || "English"}. All section titles and content must be in ${formData.language || "English"}. Do not translate proper nouns or numbers.
 
@@ -69,9 +79,6 @@ Make these terms professional, balanced, and protective for both parties.]
 
 ADDITIONAL GUIDELINES:
 - Use industry-specific terminology appropriately
-- Add estimated costs for the different phases of the project
-- Include ROI projections if relevant
-- Include estimated time for the different phases of the project
 - Include relevant best practices and standards
 - Emphasize WAZA Lab's expertise and experience
 - Highlight unique value propositions
@@ -82,40 +89,37 @@ ADDITIONAL GUIDELINES:
 
 Transform this basic project information into a compelling business case that makes the client excited to work with WAZA Lab.`;
 
-  try {
-    const response = await anthropic.messages.create({
-      model: "claude-3-5-sonnet-20241022",
-      max_tokens: 8000,
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.8,
-    });
+    try {
+      const response = await this.anthropic.messages.create({
+        model: "claude-3-5-sonnet-20241022",
+        max_tokens: 8000,
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.8,
+      });
 
-    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+      const text = response.content[0].type === 'text' ? response.content[0].text : '';
 
-    // Parse sections using regex
-    const executiveSummaryMatch =
-      formData.language === "Spanish"
-        ? text.match(
-            /RESUMEN EJECUTIVO:\s*([\s\S]*?)(?=\n\nALCANCE DEL TRABAJO:)/i,
-          )
+      // Parse sections using regex
+      const executiveSummaryMatch = formData.language === "Spanish"
+        ? text.match(/RESUMEN EJECUTIVO:\s*([\s\S]*?)(?=\n\nALCANCE DEL TRABAJO:)/i)
         : text.match(/EXECUTIVE SUMMARY:\s*([\s\S]*?)(?=\n\nSCOPE OF WORK:)/i);
-    const executiveSummary = executiveSummaryMatch?.[1]?.trim() || "";
-    const scopeOfWorkMatch =
-      formData.language === "Spanish"
-        ? text.match(/ALCANCE DEL TRABAJO:\s*([\s\S]*?)(?=\n\n)/i)
-        : text.match(/SCOPE OF WORK:\s*([\s\S]*?)(?=\n\n)/i);
-    const scopeOfWork = scopeOfWorkMatch?.[1]?.trim() || "";
-    const costBreakdown = formData.costBreakdown; // Use the original cost breakdown
-    const timeline = formData.timelineItems; // Use the original timeline
+      
+      const scopeOfWorkMatch = formData.language === "Spanish"
+        ? text.match(/ALCANCE DEL TRABAJO:\s*([\s\S]*?)(?=\n\nTÉRMINOS Y CONDICIONES:)/i)
+        : text.match(/SCOPE OF WORK:\s*([\s\S]*?)(?=\n\nTERMS AND CONDITIONS:)/i);
+      
+      const termsMatch = formData.language === "Spanish"
+        ? text.match(/TÉRMINOS Y CONDICIONES:\s*([\s\S]*?)$/i)
+        : text.match(/TERMS AND CONDITIONS:\s*([\s\S]*?)$/i);
 
-    return {
-      executiveSummary,
-      scopeOfWork,
-      costBreakdown,
-      timeline,
-    };
-  } catch (error) {
-    console.error("Anthropic API Error:", error);
-    throw error;
+      return {
+        executiveSummary: executiveSummaryMatch?.[1]?.trim() || "",
+        scopeOfWork: scopeOfWorkMatch?.[1]?.trim() || "",
+        terms: termsMatch?.[1]?.trim() || "",
+      };
+    } catch (error) {
+      console.error("Anthropic API Error:", error);
+      throw new Error(`AI generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
-};
+}
