@@ -83,14 +83,14 @@ const Home = () => {
     setError(null);
     setSuccess(false);
     setGenerationProgress(0);
-    
+
     // Update all form data including styling options
     setProposalData(data);
     const dataWithLanguage = {
       ...data,
       language: i18n.language === "es" ? "Spanish" : "English",
     };
-    
+
     console.log("API Key check:", data.anthropicApiKey);
     if (!data.anthropicApiKey) {
       console.log("No API key provided");
@@ -120,7 +120,7 @@ const Home = () => {
           ...item,
           hourlyRate: region.hourlyRate // Use the region's global hourly rate
         }));
-        
+
         return {
           ...data,
           serviceDescription: sections.executiveSummary,
@@ -133,7 +133,7 @@ const Home = () => {
 
       setGenerationStep("Finalizing proposal...");
       setGenerationProgress(90);
-      
+
       setRegionalProposals(regionalProposalsData);
       setProposalData({
         ...data,
@@ -145,15 +145,15 @@ const Home = () => {
       setGenerationProgress(100);
       setGenerationStep("Proposal generated successfully!");
       setSuccess(true);
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
-      
+
     } catch (error) {
       console.error("Error generating proposal:", error);
       setError(
-        error instanceof Error 
-          ? `Generation failed: ${error.message}` 
+        error instanceof Error
+          ? `Generation failed: ${error.message}`
           : "Error generating proposal. Please check your API key and try again."
       );
     } finally {
@@ -167,14 +167,14 @@ const Home = () => {
     // Find the selected regional proposal
     const selectedProposal = regionalProposals.find(p => p.region?.id === selectedRegion);
     const currentRegion = PRICING_REGIONS.find(r => r.id === selectedRegion) || PRICING_REGIONS[0];
-    
+
     // Use regional cost items if available, otherwise use base cost items with current region rate
-    const baseCostItems = selectedProposal?.regionalCostItems || 
+    const baseCostItems = selectedProposal?.regionalCostItems ||
       (proposalData.costItems || []).map(item => ({
         ...item,
         hourlyRate: currentRegion.hourlyRate
       }));
-    
+
     const costItems = baseCostItems.map((item) => ({
       description: item.description || "Item",
       quantity: item.hours || 1,
@@ -195,9 +195,9 @@ const Home = () => {
       },
       serviceDetails: {
         description: proposalData.serviceDescription || "Service Description",
-        scope: scopeItems.length
-          ? scopeItems
-          : ["Service item 1", "Service item 2", "Service item 3"],
+        scopeOfWork: scopeItems.length
+          ? scopeItems.join('\n')
+          : "Service item 1\nService item 2\nService item 3",
       },
       pricing: {
         items: costItems.length
@@ -240,7 +240,7 @@ const Home = () => {
                 </Alert>
               </motion.div>
             )}
-            
+
             {success && (
               <motion.div
                 initial={{ y: -50, opacity: 0 }}
@@ -301,8 +301,8 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="w-full h-[600px] md:h-[700px] lg:h-[900px] order-2 lg:order-2 flex flex-col"
             >
-              <ProposalPreview 
-                {...formatProposalData()} 
+              <ProposalPreview
+                {...formatProposalData()}
                 onRegionChange={setSelectedRegion}
                 availableRegions={PRICING_REGIONS}
               />

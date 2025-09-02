@@ -18,7 +18,7 @@ interface ClientDetails {
 
 interface ServiceDetails {
   description: string;
-  scope: string[];
+  scopeOfWork: string;
 }
 
 interface PricingItem {
@@ -70,7 +70,7 @@ const ProposalPreview = ({
   },
   serviceDetails = {
     description: "Service Description",
-    scope: ["Service item 1", "Service item 2", "Service item 3"],
+    scopeOfWork: "Service item 1\nService item 2\nService item 3",
   },
   pricing = {
     items: [
@@ -130,7 +130,7 @@ const ProposalPreview = ({
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
-  
+
   const currencySymbol = pricingRegion?.currencySymbol || "$";
 
   const getBorderStyle = () => {
@@ -190,7 +190,7 @@ const ProposalPreview = ({
                 <p className="text-sm text-amber-300/70 font-medium tracking-wide">Real-time proposal preview</p>
               </div>
             </div>
-            
+
             <Badge variant="secondary" className="bg-gradient-to-r from-amber-500/10 to-yellow-500/10 text-amber-200 border-amber-500/30 shadow-lg shadow-amber-500/20">
               <Sparkles className="h-3 w-3 mr-1" />
               AI Enhanced
@@ -225,8 +225,8 @@ const ProposalPreview = ({
                         size="sm"
                         onClick={() => onRegionChange?.(region.id)}
                         className={`transition-all duration-200 text-xs ${
-                          selectedRegion === region.id 
-                            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-amber-100 shadow-lg scale-105" 
+                          selectedRegion === region.id
+                            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-amber-100 shadow-lg scale-105"
                             : "border-slate-300 text-slate-600 hover:border-blue-400 hover:text-blue-600"
                         }`}
                       >
@@ -245,7 +245,7 @@ const ProposalPreview = ({
           )}
         </CardHeader>
       </Card>
-      
+
       {/* Enhanced Preview Container */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
@@ -262,7 +262,7 @@ const ProposalPreview = ({
             >
               <div className="max-w-none space-y-6 proposal-content">
                 {/* Enhanced Header */}
-                <motion.header 
+                <motion.header
                   className="text-center mb-8"
                   initial={{ y: -20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -281,7 +281,7 @@ const ProposalPreview = ({
                   />
                   <div className="absolute -inset-2 bg-gradient-to-r from-amber-400/20 to-yellow-500/20 rounded-full blur-xl"></div>
                 </motion.div>
-                
+
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -291,7 +291,7 @@ const ProposalPreview = ({
                     {companyTitle}
                   </h1>
                   <p className="text-base md:text-lg text-amber-300/80 font-medium tracking-wide">{companySubtitle}</p>
-                  
+
                   <div className="mt-6 flex justify-center">
                     <Badge variant="outline" className="bg-black/50 border-amber-500/30 text-amber-200 shadow-lg shadow-amber-500/20">
                       <FileText className="h-3 w-3 mr-1" />
@@ -302,7 +302,7 @@ const ProposalPreview = ({
                 </motion.header>
 
                 {/* Enhanced Client Details */}
-                <motion.section 
+                <motion.section
                   className="mb-6"
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
@@ -316,7 +316,7 @@ const ProposalPreview = ({
                       {t("preparedFor")}
                     </h2>
                   </div>
-                  
+
                   <div className="bg-black/60 backdrop-blur-lg p-4 md:p-6 rounded-xl border border-amber-500/30 shadow-2xl shadow-amber-500/10" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.6) 100%)' }}>
                     <div className="grid gap-3 md:gap-4">
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
@@ -362,13 +362,9 @@ const ProposalPreview = ({
                     {t("scopeOfWork")}
                   </h2>
                   <div className="bg-black/30 p-4 md:p-6 rounded-lg border border-amber-500/30">
-                    <ul className="list-disc list-inside space-y-2">
-                      {serviceDetails.scope.map((item, index) => (
-                        <li key={index} className="text-amber-100 text-sm md:text-base leading-relaxed break-words">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="text-amber-100 text-sm md:text-base leading-relaxed break-words whitespace-pre-line">
+                      {serviceDetails.scopeOfWork}
+                    </div>
                   </div>
                 </section>
 

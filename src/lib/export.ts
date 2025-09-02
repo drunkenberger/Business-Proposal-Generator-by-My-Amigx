@@ -237,9 +237,9 @@ export function exportToWord(data) {
 
       <div class="section">
         <h2 class="section-title">Scope of Work</h2>
-        <ul>
-          ${data.serviceDetails.scope.map((item) => `<li>${item}</li>`).join("")}
-        </ul>
+        <div style="white-space: pre-line;">
+          ${data.serviceDetails.scopeOfWork}
+        </div>
       </div>
 
       <div class="section">

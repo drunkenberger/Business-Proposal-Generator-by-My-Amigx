@@ -25,8 +25,8 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     timestamp: new Date().toISOString(),
     service: 'WAZA Proposal Generator API',
     version: '1.0.0'
@@ -52,11 +52,13 @@ app.use('*', (req, res) => {
 // Error handler
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 WAZA Proposal Generator API server running on port ${PORT}`);
-  console.log(`📊 Health check available at: http://localhost:${PORT}/health`);
-  console.log(`🔗 API endpoints available at: http://localhost:${PORT}/api`);
-});
+// Start server (guard for tests/SSR)
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`🚀 WAZA Proposal Generator API server running on port ${PORT}`);
+    console.log(`📊 Health check available at: http://localhost:${PORT}/health`);
+    console.log(`🔗 API endpoints available at: http://localhost:${PORT}/api/proposals`);
+  });
+}
 
 export default app;

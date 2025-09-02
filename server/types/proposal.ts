@@ -21,6 +21,7 @@ export interface PricingRegion {
 export interface ProposalRequest {
   clientName: string;
   clientEmail: string;
+  company?: string;
   projectTitle: string;
   serviceDescription: string;
   deliverables: string;
@@ -48,14 +49,14 @@ export interface RegionalProposal {
 export interface ProposalResponse {
   success: true;
   data: {
-    clientDetails: {
+    client: {
       name: string;
-      company: string;
+      company?: string;
       email: string;
     };
-    serviceDetails: {
+    service: {
       description: string;
-      scope: string[];
+      scopeOfWork: string[];
     };
     timeline: TimelineItem[];
     regionalProposals: RegionalProposal[];

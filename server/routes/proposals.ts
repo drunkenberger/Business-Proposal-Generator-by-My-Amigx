@@ -13,7 +13,7 @@ const router = express.Router();
  */
 router.get('/regions', asyncHandler(async (req, res) => {
   const regions = PricingService.getAllRegions();
-  
+
   res.json({
     success: true,
     data: {
@@ -28,12 +28,12 @@ router.get('/regions', asyncHandler(async (req, res) => {
  * POST /api/proposals/generate
  * Generate a business proposal
  */
-router.post('/generate', 
+router.post('/generate',
   validateProposalRequest,
   handleValidationErrors,
   asyncHandler(async (req, res) => {
     const proposalRequest: ProposalRequest = req.body;
-    
+
     // Check for API key (either in request or environment)
     const apiKey = proposalRequest.anthropicApiKey || process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
@@ -42,19 +42,20 @@ router.post('/generate',
 
     // Initialize Anthropic service
     const anthropicService = new AnthropicService(apiKey);
-    
+
     try {
       // Generate AI content
       const aiContent = await anthropicService.generateProposal(proposalRequest);
-      
+
       // Process pricing for all regions
+      const safeCostItems = proposalRequest.costItems ?? [];
       const regionalProposals: RegionalProposal[] = PricingService.getAllRegions().map(region => {
         const regionalCostItems = PricingService.calculateRegionalPricing(
-          proposalRequest.costItems, 
+          safeCostItems,
           region
         );
         const totalCost = PricingService.calculateTotalCost(regionalCostItems);
-        
+
         return {
           region,
           costItems: regionalCostItems,
@@ -65,23 +66,18 @@ router.post('/generate',
         };
       });
 
-      // Prepare deliverables as array
-      const scopeItems = proposalRequest.deliverables
-        .split('\n')
-        .filter(Boolean)
-        .map(item => item.trim());
-
+      // Use scopeOfWork from AI content directly
       const response: ProposalResponse = {
         success: true,
         data: {
           clientDetails: {
             name: proposalRequest.clientName,
-            company: proposalRequest.projectTitle,
+            company: proposalRequest.company,
             email: proposalRequest.clientEmail
           },
           serviceDetails: {
             description: aiContent.executiveSummary,
-            scope: scopeItems
+            scopeOfWork: aiContent.scopeOfWork
           },
           timeline: proposalRequest.timelineItems,
           regionalProposals,
@@ -91,12 +87,12 @@ router.post('/generate',
       };
 
       res.json(response);
-      
+
     } catch (error) {
       console.error('Proposal generation error:', error);
       throw createError(
-        500, 
-        error instanceof Error 
+        500,
+        error instanceof Error
           ? `Proposal generation failed: ${error.message}`
           : 'Unknown error occurred during proposal generation'
       );
@@ -111,7 +107,7 @@ router.post('/generate',
 router.get('/health', asyncHandler(async (req, res) => {
   // Basic health check - in production you might want to test API connectivity
   const hasApiKey = !!(process.env.ANTHROPIC_API_KEY);
-  
+
   res.json({
     success: true,
     data: {

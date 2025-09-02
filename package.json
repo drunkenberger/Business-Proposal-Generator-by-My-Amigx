@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "types:supabase": "npx supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/types/supabase.ts",
     "api:dev": "nodemon --exec ts-node --esm server/index.ts",
-    "api:build": "tsc server/index.ts --outDir dist/server --target es2022 --module esnext --moduleResolution node",
+    "api:build": "tsc -p server/tsconfig.json",
     "api:start": "node dist/server/index.js",
     "api:watch": "nodemon --watch server --ext ts --exec ts-node --esm server/index.ts"
   },
@@ -86,6 +86,7 @@
     "@types/node": "^20.14.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@vercel/node": "^5.3.17",
     "@vitejs/plugin-react-swc": "3.5.0",
     "autoprefixer": "^10.4.19",
     "nodemon": "^3.1.10",

@@ -162,6 +162,78 @@ Perfect for:
 4. **Review & Edit**: AI-generated content can be customized after generation
 5. **Regional Considerations**: Choose the appropriate region for your client's market
 
+## 🌐 API Deployment (Vercel)
+
+### Deployed Endpoints
+
+The API is deployed alongside the frontend on Vercel:
+
+- **Frontend**: `https://business-proposal-generator-soyel-changs-projects.vercel.app/`
+- **API Health**: `https://business-proposal-generator-soyel-changs-projects.vercel.app/api/health`
+- **Generate Proposal**: `POST https://business-proposal-generator-soyel-changs-projects.vercel.app/api/proposals/generate`
+- **Get Regions**: `GET https://business-proposal-generator-soyel-changs-projects.vercel.app/api/proposals/regions`
+
+### Setting Up Environment Variables on Vercel
+
+1. Go to your [Vercel Dashboard](https://vercel.com/dashboard)
+2. Select your project
+3. Navigate to Settings → Environment Variables
+4. Add the following variable:
+   - **Name**: `ANTHROPIC_API_KEY`
+   - **Value**: Your Anthropic API key (starts with `sk-`)
+   - **Environment**: Production, Preview, Development
+
+### API Usage Example
+
+```bash
+# Generate a proposal via API
+curl -X POST https://business-proposal-generator-soyel-changs-projects.vercel.app/api/proposals/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clientName": "John Doe",
+    "clientEmail": "john@example.com",
+    "projectTitle": "Website Development",
+    "serviceDescription": "Modern responsive website with e-commerce",
+    "deliverables": "Frontend design\nBackend development\nPayment integration",
+    "costItems": [
+      {"description": "Development", "hours": 40}
+    ],
+    "timelineItems": [
+      {
+        "milestone": "Development Phase",
+        "startDate": "2024-02-01",
+        "duration": 4,
+        "durationUnit": "weeks"
+      }
+    ]
+  }'
+```
+
+### n8n Integration
+
+Use the deployed API in your n8n workflows:
+
+1. **HTTP Request Node**:
+   - Method: `POST`
+   - URL: `https://business-proposal-generator-soyel-changs-projects.vercel.app/api/proposals/generate`
+   - Headers: `{"Content-Type": "application/json"}`
+   - Body: JSON with proposal data
+
+2. **Response**: Receives complete proposal with regional pricing and AI-generated content
+
+### Local Development with Vercel CLI
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Run locally with serverless functions
+vercel dev
+
+# Deploy to production
+vercel --prod
+```
+
 ## 🔒 Privacy & Security
 
 ### Data Transmission to Third-Party Services
