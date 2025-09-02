@@ -1,4 +1,4 @@
-const Anthropic = require('@anthropic-ai/sdk').default;
+const Anthropic = require('@anthropic-ai/sdk');
 
 // Pricing regions
 const PRICING_REGIONS = [
@@ -180,7 +180,7 @@ export default async function handler(req, res) {
 
     res.status(200).json(response);
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Proposal generation error:', error);
     
     // Handle Anthropic API errors
@@ -211,7 +211,9 @@ export default async function handler(req, res) {
       success: false,
       error: {
         message: error?.message || 'An error occurred while generating the proposal',
-        status: 500
+        status: 500,
+        details: error?.toString(),
+        stack: error?.stack
       },
       timestamp: new Date().toISOString()
     });
