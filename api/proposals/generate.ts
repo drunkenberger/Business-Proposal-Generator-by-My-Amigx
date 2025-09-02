@@ -1,4 +1,4 @@
-const Anthropic = require('@anthropic-ai/sdk');
+import Anthropic from '@anthropic-ai/sdk';
 
 // Pricing regions
 const PRICING_REGIONS = [

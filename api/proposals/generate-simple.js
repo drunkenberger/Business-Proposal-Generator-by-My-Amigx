@@ -45,10 +45,11 @@ export default async function handler(req, res) {
     
     console.log('API key found in environment');
 
-    // Try to load Anthropic SDK
+    // Import Anthropic SDK
     let Anthropic;
     try {
-      Anthropic = require('@anthropic-ai/sdk');
+      const module = await import('@anthropic-ai/sdk');
+      Anthropic = module.default;
       console.log('Anthropic SDK loaded successfully');
     } catch (importError) {
       console.error('Failed to import Anthropic SDK:', importError);
