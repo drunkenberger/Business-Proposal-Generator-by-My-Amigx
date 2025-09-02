@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+// Remove import
 
 const PRICING_REGIONS = [
   {
@@ -24,7 +24,7 @@ const PRICING_REGIONS = [
   }
 ];
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');

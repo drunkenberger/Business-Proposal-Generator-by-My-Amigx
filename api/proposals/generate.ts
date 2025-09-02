@@ -1,41 +1,14 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import Anthropic from '@anthropic-ai/sdk';
-
-// Types
-interface CostItem {
-  description: string;
-  hours: number;
-}
-
-interface TimelineItem {
-  milestone: string;
-  startDate: string;
-  duration: number;
-  durationUnit: 'days' | 'weeks' | 'months';
-}
-
-interface PricingRegion {
-  id: string;
-  name: string;
-  hourlyRate: number;
-  currency: string;
-  symbol: string;
-}
-
-interface RegionalCostItem extends CostItem {
-  hourlyRate: number;
-  totalCost: number;
-}
+const Anthropic = require('@anthropic-ai/sdk').default;
 
 // Pricing regions
-const PRICING_REGIONS: PricingRegion[] = [
+const PRICING_REGIONS = [
   { id: 'mexico', name: 'Mexico', hourlyRate: 25, currency: 'USD', symbol: '$' },
   { id: 'us', name: 'United States', hourlyRate: 75, currency: 'USD', symbol: '$' },
   { id: 'europe', name: 'Europe', hourlyRate: 65, currency: 'USD', symbol: '$' }
 ];
 
 // Helper functions
-function calculateRegionalPricing(costItems: CostItem[], region: PricingRegion): RegionalCostItem[] {
+function calculateRegionalPricing(costItems, region) {
   return costItems.map(item => ({
     ...item,
     hourlyRate: region.hourlyRate,
@@ -43,13 +16,13 @@ function calculateRegionalPricing(costItems: CostItem[], region: PricingRegion):
   }));
 }
 
-function calculateTotalCost(regionalCostItems: RegionalCostItem[]): number {
+function calculateTotalCost(regionalCostItems) {
   const sum = regionalCostItems.reduce((total, item) => total + item.totalCost, 0);
   return Math.round(sum * 100) / 100;
 }
 
 // Validation helper
-function validateRequest(body: any): string | null {
+function validateRequest(body) {
   if (!body.clientName || body.clientName.length < 2) return 'Client name is required (min 2 characters)';
   if (!body.clientEmail || !body.clientEmail.includes('@')) return 'Valid email is required';
   if (!body.projectTitle || body.projectTitle.length < 5) return 'Project title is required (min 5 characters)';
@@ -61,7 +34,7 @@ function validateRequest(body: any): string | null {
 }
 
 // AI generation function
-async function generateProposal(anthropic: Anthropic, formData: any) {
+async function generateProposal(anthropic, formData) {
   const prompt = `You are an expert business consultant and proposal writer with 15+ years of experience. Your task is to create a comprehensive, professional business proposal that significantly enriches and expands upon the basic information provided by the user.
 
 IMPORTANT: Generate the entire response in ${formData.language || "English"}. All section titles and content must be in ${formData.language || "English"}. Do not translate proper nouns or numbers.
@@ -71,8 +44,8 @@ BASE INFORMATION PROVIDED:
 - Project: ${formData.projectTitle}
 - Services: ${formData.serviceDescription}
 - Deliverables: ${formData.deliverables}
-- Cost Items: ${formData.costItems?.map((item: CostItem) => `${item.description}: ${item.hours} hours`).join("\n")}
-- Timeline: ${formData.timelineItems?.map((item: TimelineItem) => `${item.milestone}: ${item.duration} ${item.durationUnit} starting ${item.startDate}`).join("\n")}
+- Cost Items: ${formData.costItems?.map((item) => `${item.description}: ${item.hours} hours`).join("\n")}
+- Timeline: ${formData.timelineItems?.map((item) => `${item.milestone}: ${item.duration} ${item.durationUnit} starting ${item.startDate}`).join("\n")}
 
 YOUR MISSION: Transform this basic information into a compelling, detailed business proposal.
 
@@ -118,7 +91,7 @@ Transform this basic project information into a compelling business case that ma
   };
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
