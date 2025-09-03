@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: waza-proposal-api
+    env: node
+    plan: free
+    buildCommand: npm install && npm run api:build
+    startCommand: npm run api:start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ANTHROPIC_API_KEY
+        sync: false
