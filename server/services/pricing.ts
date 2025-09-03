@@ -1,4 +1,4 @@
-import { PricingRegion, CostItem, RegionalCostItem } from "../types/proposal";
+import { PricingRegion, CostItem, RegionalCostItem } from "../types/proposal.js";
 
 export const PRICING_REGIONS: PricingRegion[] = [
   {
@@ -25,7 +25,6 @@ export const PRICING_REGIONS: PricingRegion[] = [
 ];
 
 export class PricingService {
-  static calculateRegionalPricing(costItems: CostItem[], region: PricingRegion): RegionalCostItem[] {
   static calculateRegionalPricing(costItems: CostItem[], region: PricingRegion): RegionalCostItem[] {
     return costItems.map(item => ({
       ...item,

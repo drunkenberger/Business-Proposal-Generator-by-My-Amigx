@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { ProposalRequest } from "../types/proposal";
+import { ProposalRequest } from "../types/proposal.js";
 
 export class AnthropicService {
   private anthropic: Anthropic;
@@ -91,7 +91,7 @@ Transform this basic project information into a compelling business case that ma
 
     try {
       const response = await this.anthropic.messages.create({
-        model: "claude-3-5-sonnet-20241022",
+        model: "claude-3-5-sonnet-20250114",
         max_tokens: 8000,
         messages: [{ role: "user", content: prompt }],
         temperature: 0.8,

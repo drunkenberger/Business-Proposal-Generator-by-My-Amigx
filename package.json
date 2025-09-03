@@ -13,6 +13,7 @@
     "api:dev": "nodemon --exec ts-node --esm server/index.ts",
     "api:build": "tsc -p server/tsconfig.json",
     "api:start": "node dist/server/index.js",
+    "start": "npm run api:start",
     "api:watch": "nodemon --watch server --ext ts --exec ts-node --esm server/index.ts"
   },
   "dependencies": {
@@ -86,7 +87,6 @@
     "@types/node": "^20.14.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
-    "@vercel/node": "^5.3.17",
     "@vitejs/plugin-react-swc": "3.5.0",
     "autoprefixer": "^10.4.19",
     "nodemon": "^3.1.10",
@@ -98,6 +98,6 @@
     "vite": "^5.2.0"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=18.0.0"
   }
 }

@@ -1,9 +1,9 @@
-import express from 'express';
-import { AnthropicService } from '../services/anthropic';
-import { PricingService } from '../services/pricing';
-import { asyncHandler, createError } from '../middleware/errorHandler';
-import { validateProposalRequest, handleValidationErrors } from '../middleware/validation';
-import { ProposalRequest, ProposalResponse, RegionalProposal } from '../types/proposal';
+import express, { Request, Response } from 'express';
+import { AnthropicService } from '../services/anthropic.js';
+import { PricingService } from '../services/pricing.js';
+import { asyncHandler, createError } from '../middleware/errorHandler.js';
+import { validateProposalRequest, handleValidationErrors } from '../middleware/validation.js';
+import { ProposalRequest, ProposalResponse, RegionalProposal } from '../types/proposal.js';
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ const router = express.Router();
  * GET /api/proposals/regions
  * Get available pricing regions
  */
-router.get('/regions', asyncHandler(async (req, res) => {
+router.get('/regions', asyncHandler(async (req: Request, res: Response) => {
   const regions = PricingService.getAllRegions();
 
   res.json({
@@ -31,7 +31,7 @@ router.get('/regions', asyncHandler(async (req, res) => {
 router.post('/generate',
   validateProposalRequest,
   handleValidationErrors,
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const proposalRequest: ProposalRequest = req.body;
 
     // Check for API key (either in request or environment)
@@ -70,14 +70,14 @@ router.post('/generate',
       const response: ProposalResponse = {
         success: true,
         data: {
-          clientDetails: {
+          client: {
             name: proposalRequest.clientName,
             company: proposalRequest.company,
             email: proposalRequest.clientEmail
           },
-          serviceDetails: {
+          service: {
             description: aiContent.executiveSummary,
-            scopeOfWork: aiContent.scopeOfWork
+            scopeOfWork: [aiContent.scopeOfWork]
           },
           timeline: proposalRequest.timelineItems,
           regionalProposals,
@@ -104,7 +104,7 @@ router.post('/generate',
  * GET /api/proposals/health
  * Health check for the proposals service
  */
-router.get('/health', asyncHandler(async (req, res) => {
+router.get('/health', asyncHandler(async (req: Request, res: Response) => {
   // Basic health check - in production you might want to test API connectivity
   const hasApiKey = !!(process.env.ANTHROPIC_API_KEY);
 

@@ -3,8 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import proposalRoutes from './routes/proposals';
-import { errorHandler } from './middleware/errorHandler';
+import proposalRoutes from './routes/proposals.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
@@ -37,7 +37,7 @@ app.get('/health', (req, res) => {
 app.use('/api/proposals', proposalRoutes);
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     error: 'Endpoint not found',
     message: `The endpoint ${req.method} ${req.originalUrl} does not exist`,

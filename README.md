@@ -162,47 +162,52 @@ Perfect for:
 4. **Review & Edit**: AI-generated content can be customized after generation
 5. **Regional Considerations**: Choose the appropriate region for your client's market
 
-## 🌐 API Deployment (Vercel)
+## 🌐 API Deployment (Railway)
 
-### Deployed Endpoints
+### API Endpoints
 
-The API is deployed alongside the frontend on Vercel:
+The API is deployed on Railway for unlimited processing time:
 
-- **Frontend**: `https://business-proposal-generator-soyel-changs-projects.vercel.app/`
-- **API Health**: `https://business-proposal-generator-soyel-changs-projects.vercel.app/api/health`
-- **Generate Proposal**: `POST https://business-proposal-generator-soyel-changs-projects.vercel.app/api/proposals/generate`
-- **Get Regions**: `GET https://business-proposal-generator-soyel-changs-projects.vercel.app/api/proposals/regions`
+- **API Health**: `https://your-project.up.railway.app/health`
+- **Generate Proposal**: `POST https://your-project.up.railway.app/api/proposals/generate`
+- **Get Regions**: `GET https://your-project.up.railway.app/api/proposals/regions`
 
-### Setting Up Environment Variables on Vercel
+### Railway Deployment Steps
 
-1. Go to your [Vercel Dashboard](https://vercel.com/dashboard)
-2. Select your project
-3. Navigate to Settings → Environment Variables
-4. Add the following variable:
-   - **Name**: `ANTHROPIC_API_KEY`
-   - **Value**: Your Anthropic API key (starts with `sk-`)
-   - **Environment**: Production, Preview, Development
+1. **Sign up**: Go to [Railway](https://railway.app) and create an account
+2. **Connect GitHub**: Link your GitHub account
+3. **Deploy**: Click "Deploy from GitHub repo" and select this repository
+4. **Environment Variables**: Add `ANTHROPIC_API_KEY` in your Railway project settings
+5. **Domain**: Railway provides a free `*.up.railway.app` domain
 
 ### API Usage Example
 
 ```bash
 # Generate a proposal via API
-curl -X POST https://business-proposal-generator-soyel-changs-projects.vercel.app/api/proposals/generate \
+curl -X POST https://your-project.up.railway.app/api/proposals/generate \
   -H "Content-Type: application/json" \
   -d '{
     "clientName": "John Doe",
     "clientEmail": "john@example.com",
     "projectTitle": "Website Development",
-    "serviceDescription": "Modern responsive website with e-commerce",
-    "deliverables": "Frontend design\nBackend development\nPayment integration",
+    "serviceDescription": "Modern responsive website with e-commerce functionality",
+    "deliverables": "Frontend design\nBackend development\nPayment integration\nAdmin dashboard",
     "costItems": [
-      {"description": "Development", "hours": 40}
+      {"description": "Frontend Development", "hours": 60},
+      {"description": "Backend Development", "hours": 80},
+      {"description": "Testing & Deployment", "hours": 20}
     ],
     "timelineItems": [
       {
         "milestone": "Development Phase",
         "startDate": "2024-02-01",
-        "duration": 4,
+        "duration": 6,
+        "durationUnit": "weeks"
+      },
+      {
+        "milestone": "Testing & Launch",
+        "startDate": "2024-03-15",
+        "duration": 2,
         "durationUnit": "weeks"
       }
     ]
@@ -211,27 +216,27 @@ curl -X POST https://business-proposal-generator-soyel-changs-projects.vercel.ap
 
 ### n8n Integration
 
-Use the deployed API in your n8n workflows:
+Use the Railway API in your n8n workflows:
 
 1. **HTTP Request Node**:
    - Method: `POST`
-   - URL: `https://business-proposal-generator-soyel-changs-projects.vercel.app/api/proposals/generate`
+   - URL: `https://your-project.up.railway.app/api/proposals/generate`
    - Headers: `{"Content-Type": "application/json"}`
    - Body: JSON with proposal data
 
 2. **Response**: Receives complete proposal with regional pricing and AI-generated content
 
-### Local Development with Vercel CLI
+### Local Development
 
 ```bash
-# Install Vercel CLI
-npm i -g vercel
+# Run API server locally
+npm run api:dev
 
-# Run locally with serverless functions
-vercel dev
+# Build for production
+npm run api:build
 
-# Deploy to production
-vercel --prod
+# Start production server
+npm run api:start
 ```
 
 ## 🔒 Privacy & Security
